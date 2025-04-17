@@ -39,12 +39,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication5.data.local.ContactEntity
+import com.example.myapplication5.ui.home.HomeScreenViewModel
 
 
 @Composable
 fun AddContactScreen(navController: NavController) {
+
+    val viewModel: HomeScreenViewModel = viewModel()
+
     // Kullanıcıdan alınan verileri tutan state değişkenleri
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
@@ -167,8 +173,19 @@ fun AddContactScreen(navController: NavController) {
 
                     Button(
                         onClick = {
-                            // Burada girilen veriler kullanılabilir
-                            println("Kişi Kaydedildi: $name $surname - $email - $phone")
+                            // Girilen bilgilerle yeni bir ContactEntity oluştur
+                            val yeniKisi = ContactEntity(
+                                name = name.trim(),
+                                surname = surname.trim(),
+                                email = email.trim(),
+                                image = "" // Şimdilik boş, belirttiğiniz gibi resim işleme şu an gerekli değil
+                            )
+
+                            // ViewModel üzerinden veritabanına kaydet
+                            viewModel.insert(yeniKisi)
+
+                            // Önceki sayfaya dön
+                            navController.navigateUp()
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {

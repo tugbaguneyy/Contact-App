@@ -1,79 +1,39 @@
 package com.example.myapplication5.ui.home
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.myapplication5.data.local.ContactDatabase
+import com.example.myapplication5.data.local.ContactEntity
+import com.example.myapplication5.domain.repository.ContactRepositoryImpl
 import com.example.myapplication5.model.Contact
+import kotlinx.coroutines.launch
 
-class HomeScreenViewModel : ViewModel() {
-    val recentAdded = MutableLiveData<List<Contact>>()
-    val allContacts = MutableLiveData<List<Contact>>()
+class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {
+   private val database=ContactDatabase.getDatabase(application)
+
+    private val repository : ContactRepositoryImpl
+
+    val contacts : LiveData<List<ContactEntity>>
 
     init {
-        val kisiListe = listOf(
-            Contact(
-                image = "",
-                name = "İhsan",
-                surname = "Arslan",
-                email = "ihsan.arslan@gmail.com"
-            ),
-            Contact(
-                image = "",
-                name = "Ayşe",
-                surname = "Yılmaz",
-                email = "ayse.yilmaz@hotmail.com"
-            ),
-            Contact(
-                image = "",
-                name = "Mehmet",
-                surname = "Kaya",
-                email = "mehmetkaya@outlook.com"
-            ),
-            Contact(
-                image = "",
-                name = "Zeynep",
-                surname = "Demir",
-                email = "z.demir@company.com"
-            ),
-            Contact(
-                image = "",
-                name = "Can",
-                surname = "Öztürk",
-                email = "can.ozturk@gmail.com"
-            ),
-            Contact(
-                image = "",
-                name = "Elif",
-                surname = "Çelik",
-                email = "elif.celik@yahoo.com"
-            ),
-            Contact(
-                image = "",
-                name = "Burak",
-                surname = "Şahin",
-                email = "buraksahin@gmail.com"
-            ),
-            Contact(
-                image = "",
-                name = "Selin",
-                surname = "Yıldız",
-                email = "selinyildiz@company.com"
-            ),
-            Contact(
-                image = "",
-                name = "Emre",
-                surname = "Aydın",
-                email = "emre.aydin@outlook.com"
-            ),
-            Contact(
-                image = "",
-                name = "Deniz",
-                surname = "Koç",
-                email = "deniz.koc@gmail.com"
-            )
-        )
+        val contactDao=database.contactDao()
+        repository=ContactRepositoryImpl(contactDao)
+        contacts=repository.getAllContacts()
+    }
 
-        recentAdded.value = kisiListe.take(3)
+    fun insert(contactEntity: ContactEntity){
+        viewModelScope.launch {
+            repository.insertContact(contactEntity = contactEntity)
+        }
+    }
 
-        allContacts.value = kisiListe
+    fun delete(contactEntity: ContactEntity){
+        viewModelScope.launch {
+            repository.deleteContact(contactEntity = contactEntity)
+        }
     }
 }
