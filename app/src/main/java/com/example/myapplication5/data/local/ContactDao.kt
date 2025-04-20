@@ -14,6 +14,9 @@ interface ContactDao{
     @Query("SELECT * FROM Contacts ORDER BY id DESC")
     fun getAllContacts() : LiveData<List<ContactEntity>>
 
+    @Query("SELECT * FROM Contacts ORDER BY id DESC LIMIT 6")
+    fun getLastSixContacts(): LiveData<List<ContactEntity>>
+
     @Delete
     fun deleteContact(contactEntity: ContactEntity)
 }

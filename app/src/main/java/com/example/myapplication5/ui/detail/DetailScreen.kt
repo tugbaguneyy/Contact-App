@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -145,6 +146,12 @@ fun DetailScreen(navController: NavController,name :String,surname:String,email 
                         data = email,
                         isNuMber = false
                     )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(onClick = {
+                    //delete fonksiyonunu çağır
+                }, modifier = Modifier.fillMaxWidth().padding(4.dp)) {
+                    Text("Delete Contact")
                 }
             }
         }

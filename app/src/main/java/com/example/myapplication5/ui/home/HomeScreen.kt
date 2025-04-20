@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication5.R
@@ -48,8 +49,12 @@ import com.example.myapplication5.ui.home.components.LazyRowComponent
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    val viewModel: HomeScreenViewModel = viewModel()
-    val allContacts by viewModel.contacts.observeAsState(emptyList())
+
+    val viewModel= hiltViewModel<HomeScreenViewModel>()
+
+    val allContacts=viewModel.allContacts.observeAsState(emptyList())
+    val recentAdded = viewModel.recentAdded.observeAsState(emptyList())
+
     var searchText = remember { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -72,19 +77,19 @@ fun HomeScreen(navController: NavController) {
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                // LazyRowComponent(kisiList = ...)  // Şimdilik boş kalacak
+                LazyRowComponent(kisiList = recentAdded.value)
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     modifier = Modifier.padding(start = 15.dp),
-                    text = "My Contacts (${allContacts.size})",
+                    text = "My Contacts (${allContacts.value.size})",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // items fonksiyonu için allContacts direk veri sağlıyoruz
-            items(allContacts) { contact ->
+            // items fonksiyonu için allContacts direkt veri sağlıyoruz
+            items(allContacts.value.size) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -92,10 +97,10 @@ fun HomeScreen(navController: NavController) {
                         .clickable {
                             navController.navigate(
                                 Screen.Detail(
-                                    name = contact.name,
-                                    surname = contact.surname,
-                                    email = contact.email,
-                                    image = contact.image
+                                    name = allContacts.value[it].name,
+                                    surname = allContacts.value[it].surname,
+                                    email = allContacts.value[it].email,
+                                    image = allContacts.value[it].image
                                 )
                             )
                         }
@@ -108,9 +113,9 @@ fun HomeScreen(navController: NavController) {
                         contentAlignment = Alignment.Center
                     ) {
                         // Eğer image boşsa, ismin ilk harflerini göster
-                        if (contact.image.isEmpty()) {
+                        if ((allContacts.value[it].image.isEmpty())) {
                             Text(
-                                text = "${contact.name.first()}${contact.surname.first()}",
+                                text = "${allContacts.value[it].name.first()}${allContacts.value[it].surname.first()}",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center
@@ -127,12 +132,12 @@ fun HomeScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(
-                            text = "${contact.name} ${contact.surname}",
+                            text = "${allContacts.value[it].name} ${allContacts.value[it].surname}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = contact.email,
+                            text = allContacts.value[it].email,
                             fontSize = 14.sp,
                             color = Color.Gray
                         )

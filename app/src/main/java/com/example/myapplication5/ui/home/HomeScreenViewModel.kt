@@ -9,31 +9,28 @@ import androidx.lifecycle.viewModelScope
 import com.example.myapplication5.data.local.ContactDatabase
 import com.example.myapplication5.data.local.ContactEntity
 import com.example.myapplication5.domain.repository.ContactRepositoryImpl
+import com.example.myapplication5.domain.usecase.GetAllContactsUseCase
+import com.example.myapplication5.domain.usecase.InsertContactUseCase
 import com.example.myapplication5.model.Contact
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {
-   private val database=ContactDatabase.getDatabase(application)
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(
+    private val getAllContactsUseCase: GetAllContactsUseCase,
+    private val insertContactUseCase: InsertContactUseCase
+) :ViewModel() {
 
-    private val repository : ContactRepositoryImpl
+    val recentAdded = getAllContactsUseCase()
 
-    val contacts : LiveData<List<ContactEntity>>
-
-    init {
-        val contactDao=database.contactDao()
-        repository=ContactRepositoryImpl(contactDao)
-        contacts=repository.getAllContacts()
-    }
+    val allContacts = getAllContactsUseCase()
 
     fun insert(contactEntity: ContactEntity){
         viewModelScope.launch {
-            repository.insertContact(contactEntity = contactEntity)
+            insertContactUseCase(contactEntity)
         }
     }
 
-    fun delete(contactEntity: ContactEntity){
-        viewModelScope.launch {
-            repository.deleteContact(contactEntity = contactEntity)
-        }
-    }
+
 }

@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -49,7 +50,7 @@ import com.example.myapplication5.ui.home.HomeScreenViewModel
 @Composable
 fun AddContactScreen(navController: NavController) {
 
-    val viewModel: HomeScreenViewModel = viewModel()
+    val viewModel=hiltViewModel<HomeScreenViewModel>()
 
     // Kullanıcıdan alınan verileri tutan state değişkenleri
     var name by remember { mutableStateOf("") }
