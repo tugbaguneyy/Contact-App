@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.*
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 
@@ -93,7 +92,7 @@ fun CustomSearchBar(searchText: MutableState<String>) {
         onExpandedChange = { expanded = it },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp)
 //            .shadow(
 //                elevation = 4.dp,
 //                shape = RoundedCornerShape(24.dp),
