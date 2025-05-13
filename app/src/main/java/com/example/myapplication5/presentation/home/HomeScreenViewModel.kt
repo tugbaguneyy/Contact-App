@@ -1,4 +1,4 @@
-package com.example.myapplication5.ui.home
+package com.example.myapplication5.presentation.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

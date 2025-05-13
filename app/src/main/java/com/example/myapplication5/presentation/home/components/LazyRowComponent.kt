@@ -1,7 +1,6 @@
-package com.example.myapplication5.ui.home.components
+package com.example.myapplication5.presentation.home.components
 
 import com.example.myapplication5.R
-import com.example.myapplication5.model.Contact
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

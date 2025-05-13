@@ -1,4 +1,4 @@
-package com.example.myapplication5.ui.detail.components
+package com.example.myapplication5.presentation.detail.components
 
 
 import androidx.compose.foundation.layout.Column
@@ -29,7 +29,7 @@ fun ContactRow(
     icon: ImageVector,
     title: String,
     data: String,
-    isNuMber: Boolean
+    isNumber: Boolean
 ) {
     Row(
         modifier = Modifier
@@ -68,7 +68,7 @@ fun ContactRow(
         Spacer(modifier = Modifier.weight(1f))
 
         // Action Icons
-        if (isNuMber) {
+        if (isNumber) {
             Icon(
                 imageVector = Icons.Default.MailOutline,
                 contentDescription = "Message",

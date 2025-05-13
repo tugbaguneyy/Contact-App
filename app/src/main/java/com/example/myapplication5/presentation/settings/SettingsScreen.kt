@@ -1,4 +1,4 @@
-package com.example.myapplication5.ui.settings
+package com.example.myapplication5.presentation.settings
 
 import androidx.compose.runtime.Composable
 
