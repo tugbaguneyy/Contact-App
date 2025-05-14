@@ -35,22 +35,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication5.data.local.ContactEntity
-import com.example.myapplication5.presentation.home.HomeScreenViewModel
 
 
 @Composable
 fun AddContactScreen(navController: NavController) {
-
-    val viewModel=hiltViewModel<HomeScreenViewModel>()
-
-    // Kullanıcıdan alınan verileri tutan state değişkenleri
-    var name by remember { mutableStateOf("") }
-    var surname by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
+    val viewModel = hiltViewModel<AddViewModel>()
+    val form = viewModel.formState.value
 
     Box(
         modifier = Modifier
@@ -60,7 +54,6 @@ fun AddContactScreen(navController: NavController) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -74,7 +67,6 @@ fun AddContactScreen(navController: NavController) {
                         .padding(horizontal = 32.dp, vertical = 24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Profil ikonu
                     Box(
                         modifier = Modifier
                             .size(100.dp)
@@ -91,78 +83,78 @@ fun AddContactScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // İsim
                     OutlinedTextField(
-                        value = name,
-                        onValueChange = { name = it },
+                        value = form.name,
+                        onValueChange = { viewModel.onFieldChange(name = it) },
                         label = { Text("İsim") },
+                        isError = !form.isNameValid,
                         leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Name") },
-                        singleLine = true,
-                        shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
+                    if (!form.isNameValid) {
+                        Text("İsim boş bırakılamaz", color = Color.Red, fontSize = 12.sp)
+                    }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Soyisim
                     OutlinedTextField(
-                        value = surname,
-                        onValueChange = { surname = it },
+                        value = form.surname,
+                        onValueChange = { viewModel.onFieldChange(surname = it) },
                         label = { Text("Soyisim") },
+                        isError = !form.isSurnameValid,
                         leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Surname") },
-                        singleLine = true,
-                        shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
+                    if (!form.isSurnameValid) {
+                        Text("Soyisim boş bırakılamaz", color = Color.Red, fontSize = 12.sp)
+                    }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Email
                     OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
+                        value = form.email,
+                        onValueChange = { viewModel.onFieldChange(email = it) },
                         label = { Text("Email") },
+                        isError = !form.isEmailValid,
                         leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email") },
-                        singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
+                    if (!form.isEmailValid) {
+                        Text("Geçerli bir e-posta girin", color = Color.Red, fontSize = 12.sp)
+                    }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Telefon
                     OutlinedTextField(
-                        value = phone,
-                        onValueChange = { phone = it },
+                        value = form.phone,
+                        onValueChange = { viewModel.onFieldChange(phone = it) },
                         label = { Text("Telefon Numarası") },
+                        isError = !form.isPhoneValid,
                         leadingIcon = { Icon(Icons.Default.Phone, contentDescription = "Phone") },
-                        singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                        shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
+                    if (!form.isPhoneValid) {
+                        Text("Geçerli bir telefon numarası girin", color = Color.Red, fontSize = 12.sp)
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
                         onClick = {
-                            // Girilen bilgilerle yeni bir ContactEntity oluştur
-                            val yeniKisi = ContactEntity(
-                                name = name.trim(),
-                                surname = surname.trim(),
-                                email = email.trim(),
-                                image = "", // Şimdilik boş, belirttiğiniz gibi resim işleme şu an gerekli değil
-                                phone = phone.trim()
+                            val contact = ContactEntity(
+                                name = form.name.trim(),
+                                surname = form.surname.trim(),
+                                email = if (form.email.trim().isNotEmpty()) form.email.trim() else "",
+                                phone = if (form.phone.trim().isNotEmpty()) form.phone.trim() else "",
+                                image = ""
                             )
-
-                            // ViewModel üzerinden veritabanına kaydet
-                            viewModel.insert(yeniKisi)
-
-                            // Önceki sayfaya dön
+                            viewModel.insert(contact)
                             navController.navigateUp()
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = form.isFormValid
                     ) {
                         Text("Kaydet")
                     }
@@ -171,3 +163,4 @@ fun AddContactScreen(navController: NavController) {
         }
     }
 }
+
