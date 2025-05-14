@@ -37,7 +37,8 @@ fun NavigationGraph(
                 name = args.name,
                 email = args.email,
                 surname = args.surname,
-                image = args.image
+                image = args.image,
+                phone = args.phone
             )
         }
         composable<Settings> {

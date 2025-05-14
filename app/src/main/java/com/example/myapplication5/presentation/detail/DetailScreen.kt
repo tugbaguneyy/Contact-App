@@ -44,7 +44,8 @@ fun DetailScreen(
     name: String,
     surname: String,
     email: String,
-    image: String
+    image: String,
+    phone: String
 ) {
     Box(
         modifier = Modifier
@@ -133,7 +134,7 @@ fun DetailScreen(
                 ContactRow(
                     icon = Icons.Default.Phone,
                     title = "WhatsApp",
-                    data = "+90 531 470 06 85",
+                    data = phone,
                     isNumber = true
                 )
 

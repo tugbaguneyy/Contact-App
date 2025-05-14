@@ -87,7 +87,8 @@ fun HomeScreen(navController: NavController) {
                                     name = allContacts.value[it].name,
                                     surname = allContacts.value[it].surname,
                                     email = allContacts.value[it].email,
-                                    image = allContacts.value[it].image
+                                    image = allContacts.value[it].image,
+                                    phone = allContacts.value[it].phone
                                 )
                             )
                         }
@@ -138,8 +139,8 @@ fun HomeScreen(navController: NavController) {
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
             onClick = { navController.navigate(Screen.AddContact) },
-            containerColor = Color(0xFFFF5722),
-            contentColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.background,
             shape = RoundedCornerShape(25.dp)
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "Add Contact")

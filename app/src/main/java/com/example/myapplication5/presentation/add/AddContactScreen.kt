@@ -152,7 +152,8 @@ fun AddContactScreen(navController: NavController) {
                                 name = name.trim(),
                                 surname = surname.trim(),
                                 email = email.trim(),
-                                image = "" // Şimdilik boş, belirttiğiniz gibi resim işleme şu an gerekli değil
+                                image = "", // Şimdilik boş, belirttiğiniz gibi resim işleme şu an gerekli değil
+                                phone = phone.trim()
                             )
 
                             // ViewModel üzerinden veritabanına kaydet

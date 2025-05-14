@@ -21,5 +21,8 @@ data class ContactEntity (
     val email : String,
 
     @ColumnInfo(name = "image")
-    val image : String
+    val image : String,
+
+    @ColumnInfo(name = "phone")
+    val phone : String
 )
