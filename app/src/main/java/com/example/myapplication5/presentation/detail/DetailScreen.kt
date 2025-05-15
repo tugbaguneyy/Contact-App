@@ -130,24 +130,30 @@ fun DetailScreen(
                     .padding(vertical = 32.dp, horizontal = 16.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                ContactRow(
-                    icon = Icons.Default.Phone,
-                    title = "WhatsApp",
-                    data = phone,
-                    isNumber = true
-                )
+            )
+            {
+                if(phone.isNotEmpty()) {
+                    ContactRow(
+                        icon = Icons.Default.Phone,
+                        title = "WhatsApp",
+                        data = phone,
+                        isNumber = true
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                ContactRow(
-                    icon = Icons.Default.Email,
-                    title = "Email",
-                    data = email,
-                    isNumber = false
-                )
+                if(email.isNotEmpty()){
+                    ContactRow(
+                        icon = Icons.Default.Email,
+                        title = "Email",
+                        data = email,
+                        isNumber = false
+                    )
+                }
             }
         }
     }
 }
+
 
