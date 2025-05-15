@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,7 +65,7 @@ fun HomeScreen(navController: NavController) {
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                LazyRowComponent(kisiList = recentAdded.value)
+                LazyRowComponent( recentAdded.value,navController)
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     modifier = Modifier.padding(start = 15.dp),
@@ -138,12 +139,12 @@ fun HomeScreen(navController: NavController) {
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            onClick = { navController.navigate(Screen.AddContact) },
+            onClick = { navController.navigate(Screen.Dialer) },
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.background,
             shape = RoundedCornerShape(25.dp)
         ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Add Contact")
+            Icon(imageVector = Icons.Default.Phone, contentDescription = "Dialer Screen")
         }
     }
 }

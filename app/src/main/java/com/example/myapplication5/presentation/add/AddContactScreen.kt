@@ -1,19 +1,25 @@
 package com.example.myapplication5.presentation.add
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
@@ -21,9 +27,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,7 +61,10 @@ fun AddContactScreen(navController: NavController) {
             .background(MaterialTheme.colorScheme.primary)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 80.dp)
         ) {
             Card(
                 modifier = Modifier
@@ -138,27 +150,50 @@ fun AddContactScreen(navController: NavController) {
                     if (!form.isPhoneValid) {
                         Text("Geçerli bir telefon numarası girin", color = Color.Red, fontSize = 12.sp)
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = {
-                            val contact = ContactEntity(
-                                name = form.name.trim(),
-                                surname = form.surname.trim(),
-                                email = if (form.email.trim().isNotEmpty()) form.email.trim() else "",
-                                phone = if (form.phone.trim().isNotEmpty()) form.phone.trim() else "",
-                                image = ""
-                            )
-                            viewModel.insert(contact)
-                            navController.navigateUp()
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = form.isFormValid
-                    ) {
-                        Text("Kaydet")
-                    }
                 }
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextButton(
+                onClick = { navController.navigateUp() },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = "İptal",
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            TextButton(
+                onClick = {
+                    val contact = ContactEntity(
+                        name = form.name.trim(),
+                        surname = form.surname.trim(),
+                        email = if (form.email.trim().isNotEmpty()) form.email.trim() else "",
+                        phone = if (form.phone.trim().isNotEmpty()) form.phone.trim() else "",
+                        image = ""
+                    )
+                    viewModel.insert(contact)
+                    navController.navigateUp()
+                },
+                enabled = form.isFormValid,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text="Tamam",
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }

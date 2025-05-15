@@ -17,12 +17,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,6 +61,19 @@ fun DetailScreen(
                 )
             )
     ) {
+        IconButton(
+            onClick = { navController.navigateUp() },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(40.dp)
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.2f), CircleShape),
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back",
+                tint = MaterialTheme.colorScheme.background
+            )
+        }
         // Profile, Name and Edit Button (outside the card)
         Column(
             modifier = Modifier

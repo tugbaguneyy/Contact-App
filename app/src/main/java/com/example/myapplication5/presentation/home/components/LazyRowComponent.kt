@@ -3,6 +3,7 @@ package com.example.myapplication5.presentation.home.components
 import com.example.myapplication5.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,24 +25,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.myapplication5.data.local.ContactEntity
+import com.example.myapplication5.navigation.Screen
 
 
 @Composable
-fun LazyRowComponent(kisiList: List<ContactEntity>) {
+fun LazyRowComponent(contactList: List<ContactEntity>,navController: NavController) {
     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp)) {
-        items(kisiList.size) {
+        items(contactList.size) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
                     modifier = Modifier
                         .size(70.dp)
                         .clip(CircleShape)
-                        .background(Color.LightGray),
+                        .background(Color.LightGray)
+                        .clickable {
+                            navController.navigate(
+                                Screen.Detail(
+                                    name = contactList[it].name,
+                                    surname = contactList[it].surname,
+                                    email = contactList[it].email,
+                                    image = contactList[it].image,
+                                    phone = contactList[it].phone
+                                )
+                            )
+                        },
                     contentAlignment = Alignment.Center
                 ) {
-                    if (kisiList[it].image.isEmpty()) {
+                    if (contactList[it].image.isEmpty()) {
                         Text(
-                            text = "${kisiList[it].name.first()}${kisiList[it].surname.first()}",
+                            text = "${contactList[it].name.first()}${contactList[it].surname.first()}",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
@@ -56,7 +70,7 @@ fun LazyRowComponent(kisiList: List<ContactEntity>) {
                 }
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = kisiList[it].name,
+                    text = contactList[it].name,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )

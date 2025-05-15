@@ -1,4 +1,4 @@
-package com.example.myapplication5.presentation.settings
+package com.example.myapplication5.presentation.dial
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun SettingsScreen(navController: NavController){
+fun DialerScreen(navController: NavController) {
     Column(modifier = Modifier.fillMaxSize()) {
         IconButton(
             onClick = { navController.navigateUp() },

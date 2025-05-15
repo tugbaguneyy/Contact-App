@@ -40,12 +40,12 @@ class MainActivity : ComponentActivity() {
                     } == true
                 }
 
-                val isAuthScreen = isCurrentScreen(Screen.SignIn::class) /*|| isCurrentScreen(Screen.Register::class)*/
+                val isHomeScreen = isCurrentScreen(Screen.Home::class)
 
 
                 Scaffold(
                        bottomBar = {
-                           if(!isAuthScreen){
+                           if(isHomeScreen){
                                 BottomBar(navController)
                            }
                        }

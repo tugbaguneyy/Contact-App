@@ -14,6 +14,7 @@ import com.example.myapplication5.navigation.Screen.Settings
 import com.example.myapplication5.presentation.add.AddContactScreen
 import com.example.myapplication5.presentation.auth.SignInScreen
 import com.example.myapplication5.presentation.detail.DetailScreen
+import com.example.myapplication5.presentation.dial.DialerScreen
 import com.example.myapplication5.presentation.home.HomeScreen
 import com.example.myapplication5.presentation.settings.SettingsScreen
 
@@ -42,7 +43,7 @@ fun NavigationGraph(
             )
         }
         composable<Settings> {
-           SettingsScreen()
+           SettingsScreen(navController)
         }
         composable<Screen.AddContact> {
             AddContactScreen(navController)
@@ -50,6 +51,9 @@ fun NavigationGraph(
 
         composable<Screen.SignIn> {
             SignInScreen(navController)
+        }
+        composable<Screen.Dialer> {
+            DialerScreen(navController)
         }
     }
 }
