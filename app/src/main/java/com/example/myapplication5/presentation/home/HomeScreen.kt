@@ -82,17 +82,7 @@ fun HomeScreen(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable {
-                            navController.navigate(
-                                Screen.Detail(
-                                    name = allContacts.value[it].name,
-                                    surname = allContacts.value[it].surname,
-                                    email = allContacts.value[it].email,
-                                    image = allContacts.value[it].image,
-                                    phone = allContacts.value[it].phone
-                                )
-                            )
-                        }
+                        .clickable{ navController.navigate(Screen.Detail(id = allContacts.value[it].id)) }
                 ) {
                     Box(
                         modifier = Modifier

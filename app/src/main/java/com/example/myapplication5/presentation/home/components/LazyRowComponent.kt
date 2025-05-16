@@ -40,17 +40,7 @@ fun LazyRowComponent(contactList: List<ContactEntity>,navController: NavControll
                         .size(70.dp)
                         .clip(CircleShape)
                         .background(Color.LightGray)
-                        .clickable {
-                            navController.navigate(
-                                Screen.Detail(
-                                    name = contactList[it].name,
-                                    surname = contactList[it].surname,
-                                    email = contactList[it].email,
-                                    image = contactList[it].image,
-                                    phone = contactList[it].phone
-                                )
-                            )
-                        },
+                        .clickable{ navController.navigate(Screen.Detail(id = contactList[it].id)) },
                     contentAlignment = Alignment.Center
                 ) {
                     if (contactList[it].image.isEmpty()) {

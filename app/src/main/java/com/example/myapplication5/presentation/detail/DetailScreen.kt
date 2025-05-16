@@ -36,19 +36,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.myapplication5.presentation.detail.components.ContactRow
 
 
 @Composable
-fun DetailScreen(
-    navController: NavController,
-    name: String,
-    surname: String,
-    email: String,
-    image: String,
-    phone: String
-) {
+fun DetailScreen(navController: NavController)
+{
+    val viewModel = hiltViewModel<DetailViewModel>()
+
+    val contact = viewModel.contact.collectAsStateWithLifecycle()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +90,7 @@ fun DetailScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "${name.first().uppercase()}${surname.first().uppercase()}",
+                    text = "${contact.value.name.first().uppercase()}${contact.value.surname.first().uppercase()}",
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color.White
                 )
@@ -100,7 +100,7 @@ fun DetailScreen(
 
             // Name
             Text(
-                text = "${name.replaceFirstChar { it.uppercase() }} ${surname.replaceFirstChar { it.uppercase() }}",
+                text = "${contact.value.name.replaceFirstChar { it.uppercase() }} ${contact.value.surname.replaceFirstChar { it.uppercase() }}",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -147,22 +147,22 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             )
             {
-                if(phone.isNotEmpty()) {
+                if(contact.value.phone.isNotEmpty()) {
                     ContactRow(
                         icon = Icons.Default.Phone,
                         title = "WhatsApp",
-                        data = phone,
+                        data = contact.value.phone,
                         isNumber = true
                     )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if(email.isNotEmpty()){
+                if(contact.value.email.isNotEmpty()){
                     ContactRow(
                         icon = Icons.Default.Email,
                         title = "Email",
-                        data = email,
+                        data = contact.value.email,
                         isNumber = false
                     )
                 }
