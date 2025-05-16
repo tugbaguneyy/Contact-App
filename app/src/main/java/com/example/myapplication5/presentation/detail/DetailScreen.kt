@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.myapplication5.presentation.detail.components.ContactOptionsMenu
 import com.example.myapplication5.presentation.detail.components.ContactRow
 
 
@@ -63,19 +64,39 @@ fun DetailScreen(navController: NavController)
                 )
             )
     ) {
-        IconButton(
-            onClick = { navController.navigateUp() },
+        // Üst satır: Back ve Menü ikonları
+        Row(
             modifier = Modifier
-                .padding(16.dp)
-                .size(40.dp)
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.2f), CircleShape),
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.background
+            // Back button
+            IconButton(
+                onClick = { navController.navigateUp() },
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.2f),
+                        CircleShape
+                    )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.background
+                )
+            }
+
+            // Menü
+            ContactOptionsMenu(
+                onEditClick = { /* edit işlemi */ },
+                onDeleteConfirmed = { viewModel.softDeleteContact() },
+                navController = navController
             )
         }
+
         // Profile, Name and Edit Button (outside the card)
         Column(
             modifier = Modifier
@@ -109,51 +130,6 @@ fun DetailScreen(navController: NavController)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-
-            // Edit Contact Button
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.clickable { /* Edit action */ }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit",
-                        tint = MaterialTheme.colorScheme.background,
-                        modifier = Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Edit",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.background
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.clickable { viewModel.softDeleteContact() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.background,
-                        modifier = Modifier.size(32.dp)
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Delete",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.background
-                    )
-                }
-            }
-
         }
 
         // Bottom Card with Contact Info (60% of screen height)
