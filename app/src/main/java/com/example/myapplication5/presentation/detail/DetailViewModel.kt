@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication5.data.local.ContactEntity
 import com.example.myapplication5.domain.usecase.GetContactByIdUseCase
+import com.example.myapplication5.domain.usecase.SoftDeleteContactUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getContactByIdUseCase: GetContactByIdUseCase,
+    private val softDeleteContactUseCase: SoftDeleteContactUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -28,11 +30,17 @@ class DetailViewModel @Inject constructor(
         getContactById(id)
     }
 
-    fun getContactById(id: Int) {
+    private fun getContactById(id: Int) {
         viewModelScope.launch {
             getContactByIdUseCase.invoke(id).collect {
                 _contact.value = it
             }
+        }
+    }
+
+    fun softDeleteContact() {
+        viewModelScope.launch {
+            softDeleteContactUseCase(id)
         }
     }
 }

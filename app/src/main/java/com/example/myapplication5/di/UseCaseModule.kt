@@ -3,7 +3,10 @@ package com.example.myapplication5.di
 import com.example.myapplication5.domain.repository.ContactDaoRepositoryImpl
 import com.example.myapplication5.domain.usecase.GetAllContactsUseCase
 import com.example.myapplication5.domain.usecase.GetContactByIdUseCase
+import com.example.myapplication5.domain.usecase.GetDeletedContactsUseCase
 import com.example.myapplication5.domain.usecase.InsertContactUseCase
+import com.example.myapplication5.domain.usecase.RestoreContactUseCase
+import com.example.myapplication5.domain.usecase.SoftDeleteContactUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +35,25 @@ object UseCaseModule{
         return GetContactByIdUseCase(repositoryImpl)
 
     }
+
+    @Provides
+    @Singleton
+    fun provideSoftDeleteContactUseCase(repositoryImpl: ContactDaoRepositoryImpl) : SoftDeleteContactUseCase {
+        return SoftDeleteContactUseCase(repositoryImpl)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRestoreContactUseCase(repositoryImpl: ContactDaoRepositoryImpl) : RestoreContactUseCase {
+        return RestoreContactUseCase(repositoryImpl)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetDeletedContactsUseCase(repositoryImpl: ContactDaoRepositoryImpl) : GetDeletedContactsUseCase {
+        return GetDeletedContactsUseCase(repositoryImpl)
+    }
+
 
 
 }

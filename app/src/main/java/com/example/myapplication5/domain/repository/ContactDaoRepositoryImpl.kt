@@ -23,4 +23,16 @@ class ContactDaoRepositoryImpl @Inject constructor(
             emit(value)
         }
     }
+
+    suspend fun softDeleteContact(id: Int) {
+        contactDao.softDeleteContact(id)
+    }
+
+    suspend fun restoreContact(id: Int) {
+        contactDao.restoreContact(id)
+    }
+
+    fun getDeletedContacts(): LiveData<List<ContactEntity>> {
+        return contactDao.getDeletedContacts()
+    }
 }

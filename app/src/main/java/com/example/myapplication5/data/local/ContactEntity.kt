@@ -24,5 +24,8 @@ data class ContactEntity (
     val image : String,
 
     @ColumnInfo(name = "phone")
-    val phone : String
+    val phone : String,
+
+    @ColumnInfo(name = "isDeleted")
+    val isDeleted: Boolean = false
 )

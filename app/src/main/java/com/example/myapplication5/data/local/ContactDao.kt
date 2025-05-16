@@ -19,9 +19,17 @@ interface ContactDao{
     fun getLastSixContacts(): LiveData<List<ContactEntity>>
 
     @Query("SELECT * FROM contacts WHERE id = :id")
-
     fun getContactById(id: Int): Flow<ContactEntity>
+
+    @Query("UPDATE Contacts SET isDeleted = 1 WHERE id = :id")
+    suspend fun softDeleteContact(id: Int)
+
+    @Query("UPDATE Contacts SET isDeleted = 0 WHERE id = :id")
+    suspend fun restoreContact(id: Int)
 
     @Delete
     fun deleteContact(contactEntity: ContactEntity)
+
+    @Query("SELECT * FROM Contacts WHERE isDeleted = 1 ORDER BY id DESC")
+    fun getDeletedContacts(): LiveData<List<ContactEntity>>
 }
