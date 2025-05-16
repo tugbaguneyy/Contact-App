@@ -31,5 +31,5 @@ interface ContactDao{
     fun deleteContact(contactEntity: ContactEntity)
 
     @Query("SELECT * FROM Contacts WHERE isDeleted = 1 ORDER BY id DESC")
-    fun getDeletedContacts(): LiveData<List<ContactEntity>>
+    fun getDeletedContacts(): Flow<List<ContactEntity>>
 }

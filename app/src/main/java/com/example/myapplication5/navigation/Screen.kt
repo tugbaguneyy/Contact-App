@@ -22,4 +22,7 @@ sealed interface Screen {
 
     @Serializable
     data object Dialer : Screen
+
+    @Serializable
+    data object RecycleBin : Screen
 }

@@ -17,6 +17,7 @@ import com.example.myapplication5.presentation.detail.DetailScreen
 import com.example.myapplication5.presentation.dial.DialerScreen
 import com.example.myapplication5.presentation.home.HomeScreen
 import com.example.myapplication5.presentation.settings.SettingsScreen
+import com.example.myapplication5.presentation.settings.recyclebin.RecycleBinScreen
 
 @Composable
 fun NavigationGraph(
@@ -47,6 +48,9 @@ fun NavigationGraph(
         }
         composable<Screen.Dialer> {
             DialerScreen(navController)
+        }
+        composable<Screen.RecycleBin> {
+            RecycleBinScreen(navController)
         }
     }
 }

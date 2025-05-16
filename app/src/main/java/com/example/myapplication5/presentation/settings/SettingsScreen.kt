@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.myapplication5.navigation.Screen
 import com.example.myapplication5.presentation.settings.components.SettingsItem
 
 @Composable
@@ -81,7 +82,7 @@ fun SettingsScreen(navController: NavController){
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 },
-                onClick = { /* TODO: Navigate to Recycle Bin Screen */ }
+                onClick = { navController.navigate(Screen.RecycleBin) }
             )
         }
     }

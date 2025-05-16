@@ -32,7 +32,7 @@ class ContactDaoRepositoryImpl @Inject constructor(
         contactDao.restoreContact(id)
     }
 
-    fun getDeletedContacts(): LiveData<List<ContactEntity>> {
+    fun getDeletedContacts(): Flow<List<ContactEntity>> {
         return contactDao.getDeletedContacts()
     }
 }
