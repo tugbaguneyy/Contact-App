@@ -12,7 +12,7 @@ interface ContactDao{
     @Insert
     suspend fun insertContact(contactEntity: ContactEntity)
 
-    @Query("SELECT * FROM Contacts ORDER BY id DESC")
+    @Query("SELECT * FROM Contacts WHERE isDeleted = 0 ORDER BY id DESC")
     fun getAllContacts() : LiveData<List<ContactEntity>>
 
     @Query("SELECT * FROM Contacts ORDER BY id DESC LIMIT 6")
