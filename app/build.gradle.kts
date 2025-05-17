@@ -90,4 +90,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
     implementation("androidx.compose.runtime:runtime-livedata:1.7.8")
+
+    //Icons Library
+    implementation("androidx.compose.material:material-icons-extended:$2024.05.00")
 }

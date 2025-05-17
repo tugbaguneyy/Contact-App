@@ -1,6 +1,7 @@
 package com.example.myapplication5.presentation.settings.recyclebin
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,7 +30,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -92,34 +95,47 @@ fun RecycleBinScreen(
                             .padding(vertical = 8.dp),
                         elevation = CardDefaults.cardElevation(4.dp)
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Row {
-                                Text(text = deletedContacts.value[it].name, style = MaterialTheme.typography.titleMedium)
-                                Spacer(modifier = Modifier.width(4.dp))
-                               Row {
-                                   IconButton(
-                                       onClick = {
-                                           viewModel.restoreContact(deletedContacts.value[it].id)
-                                       }
-                                   ) {
-                                       Icon(
-                                           imageVector = Icons.Default.Refresh,
-                                           contentDescription = "Restore",
-                                           tint = MaterialTheme.colorScheme.surface
-                                       )
-                                   }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            // Ad ve soyad
+                            Text(
+                                text = deletedContacts.value[it].name + " " + deletedContacts.value[it].surname,
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.weight(1f)
+                            )
 
-                                   Spacer(modifier = Modifier.width(8.dp))
-                                   IconButton(
-                                       onClick = {}
-                                   ) {
-                                       Icon(
-                                           imageVector = Icons.Default.Delete,
-                                           contentDescription = "Delete",
-                                           tint = MaterialTheme.colorScheme.primary
-                                       )
-                                   }
-                               }
+                            // Restore ve Delete butonları
+                            Row {
+                                IconButton(
+                                    onClick = {
+                                        viewModel.restoreContact(deletedContacts.value[it].id)
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Restore,
+                                        contentDescription = "Geri Yükle",
+                                        tint = MaterialTheme.colorScheme.tertiary
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.width(4.dp))
+
+                                IconButton(
+                                    onClick = {
+                                        // TODO: Kalıcı silme işlemi
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.DeleteForever,
+                                        contentDescription = "Kalıcı Sil",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
                             }
                         }
                     }
@@ -128,6 +144,7 @@ fun RecycleBinScreen(
         }
     }
 }
+
 
 
 
