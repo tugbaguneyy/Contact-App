@@ -27,8 +27,9 @@ interface ContactDao{
     @Query("UPDATE Contacts SET isDeleted = 0 WHERE id = :id")
     suspend fun restoreContact(id: Int)
 
-    @Delete
-    fun deleteContact(contactEntity: ContactEntity)
+    @Query("DELETE FROM Contacts WHERE id = :id")
+    suspend fun deleteContactById(id: Int)
+
 
     @Query("SELECT * FROM Contacts WHERE isDeleted = 1 ORDER BY id DESC")
     fun getDeletedContacts(): Flow<List<ContactEntity>>

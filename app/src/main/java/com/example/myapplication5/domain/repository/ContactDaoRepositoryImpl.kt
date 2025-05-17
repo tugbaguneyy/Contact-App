@@ -32,6 +32,10 @@ class ContactDaoRepositoryImpl @Inject constructor(
         contactDao.restoreContact(id)
     }
 
+    suspend fun deleteContactById(id: Int) {
+        contactDao.deleteContactById(id)
+    }
+
     fun getDeletedContacts(): Flow<List<ContactEntity>> {
         return contactDao.getDeletedContacts()
     }

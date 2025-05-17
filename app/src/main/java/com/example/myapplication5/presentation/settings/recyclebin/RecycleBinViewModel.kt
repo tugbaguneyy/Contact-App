@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication5.data.local.ContactEntity
 import com.example.myapplication5.domain.usecase.GetDeletedContactsUseCase
+import com.example.myapplication5.domain.usecase.PermanentDeleteContactUseCase
 import com.example.myapplication5.domain.usecase.RestoreContactUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecycleBinViewModel @Inject constructor(
     private val getDeletedContactsUseCase: GetDeletedContactsUseCase,
-    private val restoreContactUseCase: RestoreContactUseCase
+    private val restoreContactUseCase: RestoreContactUseCase,
+    private val permanentDeleteContactUseCase: PermanentDeleteContactUseCase
 ) : ViewModel() {
 
     private val _deletedContacts = MutableStateFlow<List<ContactEntity>>(emptyList())
@@ -36,6 +38,13 @@ class RecycleBinViewModel @Inject constructor(
     fun restoreContact(id: Int) {
         viewModelScope.launch {
             restoreContactUseCase(id)
+            loadDeletedContacts() // refresh
+        }
+    }
+
+    fun permanentDeleteContact(id: Int) {
+        viewModelScope.launch {
+            permanentDeleteContactUseCase(id)
             loadDeletedContacts() // refresh
         }
     }
