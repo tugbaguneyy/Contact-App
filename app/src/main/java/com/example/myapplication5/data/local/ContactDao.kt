@@ -16,9 +16,6 @@ interface ContactDao{
     @Query("SELECT * FROM Contacts WHERE isDeleted = 0 ORDER BY id DESC")
     fun getAllContacts(): Flow<List<ContactEntity>>
 
-    @Query("SELECT * FROM Contacts ORDER BY id DESC LIMIT 6")
-    fun getLastSixContacts(): Flow<List<ContactEntity>>
-
     @Query("SELECT * FROM contacts WHERE id = :id")
     fun getContactById(id: Int): Flow<ContactEntity>
 
