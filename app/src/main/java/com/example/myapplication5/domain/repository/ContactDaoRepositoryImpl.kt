@@ -14,7 +14,7 @@ class ContactDaoRepositoryImpl @Inject constructor(
         contactDao.insertContact(contact)
     }
 
-    fun getAllContacts() : LiveData<List<ContactEntity>>  {
+    fun getAllContacts() : Flow<List<ContactEntity>> {
         return contactDao.getAllContacts()
     }
 

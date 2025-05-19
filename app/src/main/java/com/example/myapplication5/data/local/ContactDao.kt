@@ -12,11 +12,12 @@ interface ContactDao{
     @Insert
     suspend fun insertContact(contactEntity: ContactEntity)
 
+
     @Query("SELECT * FROM Contacts WHERE isDeleted = 0 ORDER BY id DESC")
-    fun getAllContacts() : LiveData<List<ContactEntity>>
+    fun getAllContacts(): Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM Contacts ORDER BY id DESC LIMIT 6")
-    fun getLastSixContacts(): LiveData<List<ContactEntity>>
+    fun getLastSixContacts(): Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM contacts WHERE id = :id")
     fun getContactById(id: Int): Flow<ContactEntity>
@@ -30,7 +31,7 @@ interface ContactDao{
     @Query("DELETE FROM Contacts WHERE id = :id")
     suspend fun deleteContactById(id: Int)
 
-
     @Query("SELECT * FROM Contacts WHERE isDeleted = 1 ORDER BY id DESC")
     fun getDeletedContacts(): Flow<List<ContactEntity>>
+
 }

@@ -16,14 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,14 +30,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.myapplication5.R
 import com.example.myapplication5.navigation.Screen
 import com.example.myapplication5.presentation.home.components.CustomSearchBar
 import com.example.myapplication5.presentation.home.components.LazyRowComponent
@@ -51,8 +48,8 @@ fun HomeScreen(navController: NavController) {
 
     val viewModel= hiltViewModel<HomeScreenViewModel>()
 
-    val allContacts=viewModel.allContacts.observeAsState(emptyList())
-    val recentAdded = viewModel.recentAdded.observeAsState(emptyList())
+    val allContacts=viewModel.allContacts.collectAsStateWithLifecycle()
+    val recentAdded = viewModel.recentAdded.collectAsStateWithLifecycle()
 
     var searchText = remember { mutableStateOf("") }
 
