@@ -18,26 +18,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,15 +37,19 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication5.data.local.ContactEntity
-import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.ui.platform.LocalContext
-import java.io.ByteArrayOutputStream
-import android.util.Base64
 import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.filled.ImageSearch
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import com.example.myapplication5.utils.ImageUtils.base64ToBitmap
 import com.example.myapplication5.utils.ImageUtils.bitmapToBase64
 
 
@@ -66,7 +59,6 @@ fun AddContactScreen(navController: NavController) {
     val form = viewModel.formState.value
     val context = LocalContext.current
 
-    // Image picker launcher
     val imageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
@@ -75,120 +67,137 @@ fun AddContactScreen(navController: NavController) {
         }
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
+            .padding(horizontal = 32.dp, vertical = 32.dp)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .weight(1f)
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = 80.dp)
+                .fillMaxWidth()
         ) {
-            Card(
+            // 📷 Profil Fotoğrafı Alanı
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(600.dp),
-                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                Column(
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 32.dp, vertical = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .size(80.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.tertiary)
+                        .clickable { imageLauncher.launch("image/*") },
+                    contentAlignment = Alignment.Center
                 ) {
-                    // 👇 Resim alanı ve seçim butonu
-                    Box(
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary)
-                            .clickable { imageLauncher.launch("image/*") }, // 👈 Image seçici tetikleniyor
-                        contentAlignment = Alignment.Center
-                    ) {
+                    if (form.image.isEmpty()) {
                         Icon(
-                            imageVector = Icons.Default.AccountBox,
+                            imageVector = Icons.Default.ImageSearch,
                             contentDescription = "Profile Image",
-                            tint = MaterialTheme.colorScheme.background
+                            tint = MaterialTheme.colorScheme.background,
+                            modifier = Modifier.size(60.dp)
                         )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    TextButton(onClick = { imageLauncher.launch("image/*") }) {
-                        Text("Resim Yükle")
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // 🔽 Aşağıdaki alanlar değişmedi
-                    OutlinedTextField(
-                        value = form.name,
-                        onValueChange = { viewModel.onFieldChange(name = it) },
-                        label = { Text("İsim") },
-                        isError = !form.isNameValid,
-                        leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Name") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    if (!form.isNameValid) {
-                        Text("İsim boş bırakılamaz", color = Color.Red, fontSize = 12.sp)
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    OutlinedTextField(
-                        value = form.surname,
-                        onValueChange = { viewModel.onFieldChange(surname = it) },
-                        label = { Text("Soyisim") },
-                        isError = !form.isSurnameValid,
-                        leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Surname") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    if (!form.isSurnameValid) {
-                        Text("Soyisim boş bırakılamaz", color = Color.Red, fontSize = 12.sp)
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    OutlinedTextField(
-                        value = form.email,
-                        onValueChange = { viewModel.onFieldChange(email = it) },
-                        label = { Text("Email") },
-                        isError = !form.isEmailValid,
-                        leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    if (!form.isEmailValid) {
-                        Text("Geçerli bir e-posta girin", color = Color.Red, fontSize = 12.sp)
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    OutlinedTextField(
-                        value = form.phone,
-                        onValueChange = { viewModel.onFieldChange(phone = it) },
-                        label = { Text("Telefon Numarası") },
-                        isError = !form.isPhoneValid,
-                        leadingIcon = { Icon(Icons.Default.Phone, contentDescription = "Phone") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    if (!form.isPhoneValid) {
-                        Text("Geçerli bir telefon numarası girin", color = Color.Red, fontSize = 12.sp)
+                    } else {
+                        val bitmap = remember(form.image) {
+                            base64ToBitmap(form.image)
+                        }
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 🖊️ İsim Alanı
+            OutlinedTextField(
+                value = form.name,
+                onValueChange = { viewModel.onFieldChange(name = it) },
+                label = { Text("İsim") },
+                isError = !form.isNameValid,
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Name") },
+                shape = RoundedCornerShape(50),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = Color.Gray
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!form.isNameValid) {
+                Text("İsim boş bırakılamaz", color = Color.Red, fontSize = 12.sp)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // 🖊️ Soyisim Alanı
+            OutlinedTextField(
+                value = form.surname,
+                onValueChange = { viewModel.onFieldChange(surname = it) },
+                label = { Text("Soyisim") },
+                isError = !form.isSurnameValid,
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Surname") },
+                shape = RoundedCornerShape(50),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = Color.Gray
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!form.isSurnameValid) {
+                Text("Soyisim boş bırakılamaz", color = Color.Red, fontSize = 12.sp)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // 📧 Email Alanı
+            OutlinedTextField(
+                value = form.email,
+                onValueChange = { viewModel.onFieldChange(email = it) },
+                label = { Text("Email") },
+                isError = !form.isEmailValid,
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                shape = RoundedCornerShape(50),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!form.isEmailValid) {
+                Text("Geçerli bir e-posta girin", color = Color.Red, fontSize = 12.sp)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // ☎️ Telefon Alanı
+            OutlinedTextField(
+                value = form.phone,
+                onValueChange = { viewModel.onFieldChange(phone = it) },
+                label = { Text("Telefon Numarası") },
+                isError = !form.isPhoneValid,
+                leadingIcon = { Icon(Icons.Default.Phone, contentDescription = "Phone") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                shape = RoundedCornerShape(50),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            if (!form.isPhoneValid) {
+                Text("Geçerli bir telefon numarası girin", color = Color.Red, fontSize = 12.sp)
+            }
         }
 
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // ✅ Alt Butonlar (Sabit kalır)
         Row(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(16.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -196,10 +205,7 @@ fun AddContactScreen(navController: NavController) {
                 onClick = { navController.navigateUp() },
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
-                    text = "İptal",
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Text("İptal", color = MaterialTheme.colorScheme.primary.copy(0.5f))
             }
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -209,9 +215,9 @@ fun AddContactScreen(navController: NavController) {
                     val contact = ContactEntity(
                         name = form.name.trim(),
                         surname = form.surname.trim(),
-                        email = if (form.email.trim().isNotEmpty()) form.email.trim() else "",
-                        phone = if (form.phone.trim().isNotEmpty()) form.phone.trim() else "",
-                        image = form.image // 👈 Base64 resim stringi burada
+                        email = form.email.trim(),
+                        phone = form.phone.trim(),
+                        image = form.image
                     )
                     viewModel.insert(contact)
                     navController.navigateUp()
@@ -219,13 +225,12 @@ fun AddContactScreen(navController: NavController) {
                 enabled = form.isFormValid,
                 modifier = Modifier.weight(1f)
             ) {
-                Text(
-                    text="Tamam",
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Text("Tamam", color = MaterialTheme.colorScheme.primary)
             }
         }
     }
 }
+
+
 
 
