@@ -12,7 +12,6 @@ interface ContactDao{
     @Insert
     suspend fun insertContact(contactEntity: ContactEntity)
 
-
     @Query("SELECT * FROM Contacts WHERE isDeleted = 0 ORDER BY id DESC")
     fun getAllContacts(): Flow<List<ContactEntity>>
 
