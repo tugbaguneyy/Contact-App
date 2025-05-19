@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +43,7 @@ import com.example.myapplication5.R
 import com.example.myapplication5.navigation.Screen
 import com.example.myapplication5.presentation.home.components.CustomSearchBar
 import com.example.myapplication5.presentation.home.components.LazyRowComponent
+import com.example.myapplication5.utils.ImageUtils.base64ToBitmap
 
 
 @Composable
@@ -94,16 +97,20 @@ fun HomeScreen(navController: NavController) {
                         // Eğer image boşsa, ismin ilk harflerini göster
                         if ((allContacts.value[it].image.isEmpty())) {
                             Text(
-                                text = "${allContacts.value[it].name.first()}${allContacts.value[it].surname.first()}",
+                                text = "${allContacts.value[it].name.first().uppercase()}${allContacts.value[it].surname.first().uppercase()}",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center
                             )
                         } else {
                             // Burada bir resim gösterme işlemi yapılabilir (dinamik resim yükleme)
+                            val bitmap = remember(allContacts.value[it].image) {
+                                base64ToBitmap(allContacts.value[it].image)
+                            }
                             Image(
-                                painter = painterResource(R.drawable.ic_launcher_background), // Dinamik resim
+                                bitmap = bitmap.asImageBitmap(),
                                 contentDescription = null,
+                                contentScale = ContentScale.Crop,
                                 modifier = Modifier.fillMaxSize()
                             )
                         }

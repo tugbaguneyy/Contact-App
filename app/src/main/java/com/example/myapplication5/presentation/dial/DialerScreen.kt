@@ -109,7 +109,7 @@ fun DialerScreen(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp),
+                .padding(bottom = 16.dp),
             contentAlignment = Alignment.Center
         ) {
             // Arama butonu

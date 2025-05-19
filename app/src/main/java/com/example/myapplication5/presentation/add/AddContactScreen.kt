@@ -48,12 +48,32 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication5.data.local.ContactEntity
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import java.io.ByteArrayOutputStream
+import android.util.Base64
+import androidx.compose.foundation.clickable
+import com.example.myapplication5.utils.ImageUtils.bitmapToBase64
 
 
 @Composable
 fun AddContactScreen(navController: NavController) {
     val viewModel = hiltViewModel<AddViewModel>()
     val form = viewModel.formState.value
+    val context = LocalContext.current
+
+    // Image picker launcher
+    val imageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+            val base64Image = bitmapToBase64(bitmap)
+            viewModel.onFieldChange(image = base64Image)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -79,11 +99,13 @@ fun AddContactScreen(navController: NavController) {
                         .padding(horizontal = 32.dp, vertical = 24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    // 👇 Resim alanı ve seçim butonu
                     Box(
                         modifier = Modifier
                             .size(100.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary),
+                            .background(MaterialTheme.colorScheme.primary)
+                            .clickable { imageLauncher.launch("image/*") }, // 👈 Image seçici tetikleniyor
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -93,8 +115,15 @@ fun AddContactScreen(navController: NavController) {
                         )
                     }
 
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    TextButton(onClick = { imageLauncher.launch("image/*") }) {
+                        Text("Resim Yükle")
+                    }
+
                     Spacer(modifier = Modifier.height(24.dp))
 
+                    // 🔽 Aşağıdaki alanlar değişmedi
                     OutlinedTextField(
                         value = form.name,
                         onValueChange = { viewModel.onFieldChange(name = it) },
@@ -182,7 +211,7 @@ fun AddContactScreen(navController: NavController) {
                         surname = form.surname.trim(),
                         email = if (form.email.trim().isNotEmpty()) form.email.trim() else "",
                         phone = if (form.phone.trim().isNotEmpty()) form.phone.trim() else "",
-                        image = ""
+                        image = form.image // 👈 Base64 resim stringi burada
                     )
                     viewModel.insert(contact)
                     navController.navigateUp()
@@ -198,4 +227,5 @@ fun AddContactScreen(navController: NavController) {
         }
     }
 }
+
 

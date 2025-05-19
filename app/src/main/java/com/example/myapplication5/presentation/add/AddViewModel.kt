@@ -23,7 +23,8 @@ class AddViewModel @Inject constructor(
         name: String = _formState.value.name,
         surname: String = _formState.value.surname,
         email: String = _formState.value.email,
-        phone: String = _formState.value.phone
+        phone: String = _formState.value.phone,
+        image: String = _formState.value.image
     ) {
         val isNameValid = name.trim().isNotEmpty()
         val isSurnameValid = surname.trim().isNotEmpty()
@@ -35,6 +36,9 @@ class AddViewModel @Inject constructor(
         val isEmailValid = email.isEmpty() || android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
         val isPhoneValid = phone.isEmpty() || phone.matches(Regex("^\\+?[0-9]{10,15}\$"))
 
+        // Eğer image için özel bir validasyon gerekiyorsa burada kontrol edebilirsin.
+        val isImageValid = true // şimdilik true
+
         val isFormValid = isNameValid && isSurnameValid && atLeastOneContact && isEmailValid && isPhoneValid
 
         _formState.value = FormState(
@@ -42,10 +46,12 @@ class AddViewModel @Inject constructor(
             surname = surname,
             email = email,
             phone = phone,
+            image = image,
             isNameValid = isNameValid,
             isSurnameValid = isSurnameValid,
             isEmailValid = isEmailValid,
             isPhoneValid = isPhoneValid,
+            isImageValid = isImageValid,
             isFormValid = isFormValid
         )
     }
