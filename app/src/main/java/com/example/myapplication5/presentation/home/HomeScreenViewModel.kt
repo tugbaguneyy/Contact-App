@@ -28,11 +28,19 @@ class HomeScreenViewModel @Inject constructor(
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     val filteredContacts: StateFlow<List<ContactEntity>> = combine(_allContacts, _searchQuery) { contacts, query ->
-        if (query.isBlank()) {
+        val filtered = if (query.isBlank()) {
             contacts
         } else {
-            contacts.filter { it.name.contains(query.trim(), ignoreCase = true) || it.surname.contains(query.trim(), ignoreCase = true) }
+            contacts.filter {
+                it.name.contains(query.trim(), ignoreCase = true) ||
+                        it.surname.contains(query.trim(), ignoreCase = true)
+            }
         }
+
+        filtered.sortedWith(
+            compareBy<ContactEntity> { it.name.lowercase() }
+                .thenBy { it.surname.lowercase() }
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),

@@ -41,7 +41,7 @@ fun CustomSearchBar(
                 onValueChange = { onSearchTextChanged(it) },
                 placeholder = {
                     Text(
-                        "Search name here...",
+                        "Ara...",
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                         )

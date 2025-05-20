@@ -62,23 +62,30 @@ fun HomeScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     modifier = Modifier.padding(start = 15.dp),
-                    text = "Recent Added",
+                    text = "Son Eklenenler",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 LazyRowComponent( recentAdded.value,navController)
                 Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    modifier = Modifier.padding(start = 15.dp),
-                    text = "My Contacts (${filteredContacts.value.size})",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Row{
+                    Text(
+                        modifier = Modifier.padding(start = 15.dp),
+                        text = "Kişilerim ",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "(${filteredContacts.value.size})",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Light,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // items fonksiyonu için filteredContacts direkt veri sağlıyoruz
             items(filteredContacts.value.size) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

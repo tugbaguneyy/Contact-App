@@ -46,7 +46,7 @@ fun ContactOptionsMenu(
             offset = DpOffset(0.dp, 0.dp)
         ) {
             DropdownMenuItem(
-                text = { Text("Edit") },
+                text = { Text("Düzenle") },
                 onClick = {
                     menuExpanded.value = false
                     onEditClick()
@@ -56,7 +56,7 @@ fun ContactOptionsMenu(
                 }
             )
             DropdownMenuItem(
-                text = { Text("Delete") },
+                text = { Text("Sil") },
                 onClick = {
                     menuExpanded.value = false
                     showDialog.value = true
