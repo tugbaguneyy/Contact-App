@@ -1,6 +1,5 @@
 package com.example.myapplication5.presentation.detail.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -17,7 +16,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -38,7 +36,7 @@ fun ContactOptionsMenu(
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = "More options",
-                tint = MaterialTheme.colorScheme.background
+                tint = MaterialTheme.colorScheme.primary
             )
         }
 

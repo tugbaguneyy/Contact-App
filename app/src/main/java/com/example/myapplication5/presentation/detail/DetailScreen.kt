@@ -1,40 +1,37 @@
 package com.example.myapplication5.presentation.detail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,136 +40,111 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.myapplication5.presentation.detail.components.ContactOptionsMenu
 import com.example.myapplication5.presentation.detail.components.ContactRow
+import com.example.myapplication5.utils.ImageUtils.base64ToBitmap
 
 
 @Composable
-fun DetailScreen(navController: NavController)
-{
+fun DetailScreen(navController: NavController) {
     val viewModel = hiltViewModel<DetailViewModel>()
+    val contact by viewModel.contact.collectAsStateWithLifecycle()
 
-    val contact = viewModel.contact.collectAsStateWithLifecycle()
+    val bitmap = remember(contact.image) {
+        if (contact.image.isNotEmpty()) base64ToBitmap(contact.image) else null
+    }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF81D4FA), // Açık mavi
-                        Color(0xFF0091EA)  // Koyu mavi
-                    )
-                )
-            )
+            .padding(horizontal = 20.dp, vertical = 24.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        // Üst satır: Back ve Menü ikonları
+        // 🔙 Üst Bar
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Back button
-            IconButton(
-                onClick = { navController.navigateUp() },
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(
-                        MaterialTheme.colorScheme.background.copy(alpha = 0.2f),
-                        CircleShape
-                    )
-            ) {
+            IconButton(onClick = { navController.navigateUp() }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = MaterialTheme.colorScheme.background
+                    contentDescription = "Geri",
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
 
-            // Menü
             ContactOptionsMenu(
-                onEditClick = { /* edit işlemi */ },
+                onEditClick = { /* Düzenleme işlemi */ },
                 onDeleteConfirmed = { viewModel.softDeleteContact() },
                 navController = navController
             )
         }
 
-        // Profile, Name and Edit Button (outside the card)
-        Column(
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 📷 Profil Fotoğrafı veya Baş Harfler
+        Box(
             modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    shape = CircleShape
+                )
+                .align(Alignment.CenterHorizontally),
+            contentAlignment = Alignment.Center
         ) {
-            // Profile Image
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary),
-                contentAlignment = Alignment.Center
-            ) {
+            if (bitmap != null) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
                 Text(
-                    text = "${contact.value.name.first().uppercase()}${contact.value.surname.first().uppercase()}",
+                    text = "${contact.name.firstOrNull()?.uppercase() ?: ""}${contact.surname.firstOrNull()?.uppercase() ?: ""}",
                     style = MaterialTheme.typography.headlineLarge,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.background
                 )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Name
-            Text(
-                text = "${contact.value.name.replaceFirstChar { it.uppercase() }} ${contact.value.surname.replaceFirstChar { it.uppercase() }}",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
         }
 
-        // Bottom Card with Contact Info (60% of screen height)
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.6f) // Kart %60 ekran yüksekliğini kapsayacak
-                .align(Alignment.BottomCenter),
-            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 32.dp, horizontal = 16.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            )
-            {
-                if(contact.value.phone.isNotEmpty()) {
-                    ContactRow(
-                        icon = Icons.Default.Phone,
-                        title = "WhatsApp",
-                        data = contact.value.phone,
-                        isNumber = true
-                    )
-                }
+        Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
+        // 🧾 İsim
+        Text(
+            text = "${contact.name.replaceFirstChar { it.uppercase() }} ${contact.surname.replaceFirstChar { it.uppercase() }}",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
 
-                if(contact.value.email.isNotEmpty()){
-                    ContactRow(
-                        icon = Icons.Default.Email,
-                        title = "Email",
-                        data = contact.value.email,
-                        isNumber = false
-                    )
-                }
-            }
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // 📱 Telefon
+        if (contact.phone.isNotEmpty()) {
+            ContactRow(
+                icon = Icons.Default.Phone,
+                title = "Telefon",
+                data = contact.phone,
+                isNumber = true
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // 📧 Email
+        if (contact.email.isNotEmpty()) {
+            ContactRow(
+                icon = Icons.Default.Email,
+                title = "Email",
+                data = contact.email,
+                isNumber = false
+            )
         }
     }
 }
+
 
 
