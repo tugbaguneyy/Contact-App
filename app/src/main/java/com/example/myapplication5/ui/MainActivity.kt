@@ -9,12 +9,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication5.navigation.NavigationGraph
 import com.example.myapplication5.navigation.Screen
 import com.example.myapplication5.presentation.components.BottomBar
+import com.example.myapplication5.presentation.settings.SettingsViewModel
 import com.example.myapplication5.ui.theme.MyappTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.reflect.KClass
@@ -26,7 +29,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyappTheme(darkTheme = false) {
+
+            val viewModel = hiltViewModel<SettingsViewModel>()
+            val isDarkMode = viewModel.isDarkMode.collectAsStateWithLifecycle()
+
+            MyappTheme(
+                darkTheme = isDarkMode.value
+            ) {
 
                 val navController = rememberNavController()
                 val startDestination = Screen.Home

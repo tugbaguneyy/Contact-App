@@ -14,23 +14,33 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.myapplication5.navigation.Screen
 import com.example.myapplication5.presentation.settings.components.SettingsItem
 
 @Composable
 fun SettingsScreen(navController: NavController){
+
+    val viewModel = hiltViewModel<SettingsViewModel>()
+
+    var darkMode = viewModel.isDarkMode.collectAsStateWithLifecycle()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -83,6 +93,23 @@ fun SettingsScreen(navController: NavController){
                     )
                 },
                 onClick = { navController.navigate(Screen.RecycleBin) }
+            )
+            SettingsItem(
+                icon = Icons.Outlined.DarkMode,
+                title = "Karanlık Mod",
+                subtitle = "Uygulamayı karanlık temada kullan",
+                trailingContent = {
+                    Switch(
+                        checked = darkMode.value,
+                        onCheckedChange = {
+                            viewModel.setDarkMode(it)
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.primary,
+                            checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                        )
+                    )
+                }
             )
         }
     }

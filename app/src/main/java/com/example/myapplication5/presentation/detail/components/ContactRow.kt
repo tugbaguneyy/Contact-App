@@ -48,7 +48,7 @@ fun ContactRow(
         Icon(
             imageVector = icon,
             contentDescription = title,
-            tint = Color.Gray,
+            tint = MaterialTheme.colorScheme.surfaceTint,
             modifier = Modifier.size(24.dp)
         )
 
@@ -59,14 +59,13 @@ fun ContactRow(
             Text(
                 text = title,
                 style = TextStyle(
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontSize = 14.sp
                 )
             )
             Text(
                 text = data,
                 style = TextStyle(
-                    color = Color.Black,
                     fontSize = 16.sp
                 )
             )
