@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,15 +49,17 @@ fun HomeScreen(navController: NavController) {
 
     val viewModel= hiltViewModel<HomeScreenViewModel>()
 
-    val allContacts=viewModel.allContacts.collectAsStateWithLifecycle()
     val recentAdded = viewModel.recentAdded.collectAsStateWithLifecycle()
-
-    var searchText = remember { mutableStateOf("") }
+    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val filteredContacts = viewModel.filteredContacts.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             item {
-                CustomSearchBar(searchText = searchText)
+                CustomSearchBar(
+                    searchText = searchQuery,
+                    onSearchTextChanged = {viewModel.onSearchQueryChanged(it)}
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     modifier = Modifier.padding(start = 15.dp),
@@ -69,20 +72,20 @@ fun HomeScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     modifier = Modifier.padding(start = 15.dp),
-                    text = "My Contacts (${allContacts.value.size})",
+                    text = "My Contacts (${filteredContacts.value.size})",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // items fonksiyonu için allContacts direkt veri sağlıyoruz
-            items(allContacts.value.size) {
+            // items fonksiyonu için filteredContacts direkt veri sağlıyoruz
+            items(filteredContacts.value.size) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable{ navController.navigate(Screen.Detail(id = allContacts.value[it].id)) }
+                        .clickable{ navController.navigate(Screen.Detail(id = filteredContacts.value[it].id)) }
                 ) {
                     Box(
                         modifier = Modifier
@@ -92,17 +95,17 @@ fun HomeScreen(navController: NavController) {
                         contentAlignment = Alignment.Center
                     ) {
                         // Eğer image boşsa, ismin ilk harflerini göster
-                        if ((allContacts.value[it].image.isEmpty())) {
+                        if ((filteredContacts.value[it].image.isEmpty())) {
                             Text(
-                                text = "${allContacts.value[it].name.first().uppercase()}${allContacts.value[it].surname.first().uppercase()}",
+                                text = "${filteredContacts.value[it].name.first().uppercase()}${filteredContacts.value[it].surname.first().uppercase()}",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center
                             )
                         } else {
                             // Burada bir resim gösterme işlemi yapılabilir (dinamik resim yükleme)
-                            val bitmap = remember(allContacts.value[it].image) {
-                                base64ToBitmap(allContacts.value[it].image)
+                            val bitmap = remember(filteredContacts.value[it].image) {
+                                base64ToBitmap(filteredContacts.value[it].image)
                             }
                             Image(
                                 bitmap = bitmap.asImageBitmap(),
@@ -115,12 +118,12 @@ fun HomeScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(
-                            text = "${allContacts.value[it].name} ${allContacts.value[it].surname}",
+                            text = "${filteredContacts.value[it].name} ${filteredContacts.value[it].surname}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = allContacts.value[it].email,
+                            text = filteredContacts.value[it].email,
                             fontSize = 14.sp,
                             color = Color.Gray
                         )

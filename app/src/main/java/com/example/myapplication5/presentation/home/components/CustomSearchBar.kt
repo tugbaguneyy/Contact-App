@@ -27,15 +27,18 @@ import androidx.compose.ui.text.input.ImeAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomSearchBar(searchText: MutableState<String>) {
+fun CustomSearchBar(
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
     SearchBar(
         inputField = {
             TextField(
-                value = searchText.value,
-                onValueChange = { searchText.value = it },
+                value = searchText,
+                onValueChange = { onSearchTextChanged(it) },
                 placeholder = {
                     Text(
                         "Search name here...",
@@ -53,10 +56,10 @@ fun CustomSearchBar(searchText: MutableState<String>) {
                     )
                 },
                 trailingIcon = {
-                    if (searchText.value.isNotEmpty()) {
+                    if (searchText.isNotEmpty()) {
                         IconButton(
                             onClick = {
-                                searchText.value = ""
+                                onSearchTextChanged("")
                                 focusManager.clearFocus()
                             }
                         ) {
