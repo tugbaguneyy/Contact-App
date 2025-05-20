@@ -3,6 +3,7 @@ package com.example.myapplication5.data.local
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,5 +28,8 @@ interface ContactDao{
 
     @Query("SELECT * FROM Contacts WHERE isDeleted = 1 ORDER BY id DESC")
     fun getDeletedContacts(): Flow<List<ContactEntity>>
+
+    @Update
+    suspend fun updateContact(contact: ContactEntity)
 
 }

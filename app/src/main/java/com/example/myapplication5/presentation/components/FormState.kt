@@ -1,4 +1,4 @@
-package com.example.myapplication5.presentation.add
+package com.example.myapplication5.presentation.components
 
 data class FormState(
     val name: String = "",

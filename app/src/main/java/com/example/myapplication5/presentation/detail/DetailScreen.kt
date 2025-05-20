@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.myapplication5.navigation.Screen
 import com.example.myapplication5.presentation.detail.components.ContactOptionsMenu
 import com.example.myapplication5.presentation.detail.components.ContactRow
 import com.example.myapplication5.utils.ImageUtils.base64ToBitmap
@@ -73,7 +74,7 @@ fun DetailScreen(navController: NavController) {
             }
 
             ContactOptionsMenu(
-                onEditClick = { /* Düzenleme işlemi */ },
+                onEditClick = { navController.navigate(Screen.EditContact(id = contact.id)) },
                 onDeleteConfirmed = { viewModel.softDeleteContact() },
                 navController = navController
             )

@@ -8,6 +8,7 @@ import com.example.myapplication5.domain.usecase.InsertContactUseCase
 import com.example.myapplication5.domain.usecase.PermanentDeleteContactUseCase
 import com.example.myapplication5.domain.usecase.RestoreContactUseCase
 import com.example.myapplication5.domain.usecase.SoftDeleteContactUseCase
+import com.example.myapplication5.domain.usecase.UpdateContactUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,7 +62,10 @@ object UseCaseModule{
         return PermanentDeleteContactUseCase(repositoryImpl)
     }
 
-
-
+    @Provides
+    @Singleton
+    fun provideUpdateContactUseCase(repositoryImpl: ContactDaoRepositoryImpl) : UpdateContactUseCase {
+        return UpdateContactUseCase(repositoryImpl)
+    }
 
 }

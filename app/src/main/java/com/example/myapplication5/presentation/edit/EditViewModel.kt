@@ -1,20 +1,33 @@
-package com.example.myapplication5.presentation.add
+package com.example.myapplication5.presentation.edit
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication5.data.local.ContactEntity
-import com.example.myapplication5.domain.usecase.InsertContactUseCase
+import com.example.myapplication5.domain.usecase.GetContactByIdUseCase
+import com.example.myapplication5.domain.usecase.UpdateContactUseCase
 import com.example.myapplication5.presentation.components.FormState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddViewModel @Inject constructor(
-    private val insertContactUseCase: InsertContactUseCase
+class EditViewModel @Inject constructor(
+    private val getContactByIdUseCase: GetContactByIdUseCase,
+    private val updateContactUseCase: UpdateContactUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val id = savedStateHandle.get<Int>("id") ?: 0
+
+    private val _contact = MutableStateFlow<ContactEntity>(ContactEntity(0,"name","surname","","",""))
+    val contact : StateFlow<ContactEntity>
+        get() = _contact.asStateFlow()
 
     private val _formState = mutableStateOf(FormState())
     val formState: State<FormState> = _formState
@@ -56,9 +69,22 @@ class AddViewModel @Inject constructor(
         )
     }
 
-    fun insert(contactEntity: ContactEntity) {
+    init {
+        getContactById(id)
+    }
+
+    private fun getContactById(id: Int) {
         viewModelScope.launch {
-            insertContactUseCase(contactEntity)
+            getContactByIdUseCase.invoke(id).collect {
+                _contact.value = it
+            }
         }
     }
+
+    fun update(contactEntity: ContactEntity) {
+        viewModelScope.launch {
+            updateContactUseCase(contactEntity)
+        }
+    }
+
 }

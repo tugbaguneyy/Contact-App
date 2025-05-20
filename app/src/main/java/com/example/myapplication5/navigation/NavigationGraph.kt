@@ -15,6 +15,7 @@ import com.example.myapplication5.presentation.add.AddContactScreen
 import com.example.myapplication5.presentation.auth.SignInScreen
 import com.example.myapplication5.presentation.detail.DetailScreen
 import com.example.myapplication5.presentation.dial.DialerScreen
+import com.example.myapplication5.presentation.edit.EditContactScreen
 import com.example.myapplication5.presentation.home.HomeScreen
 import com.example.myapplication5.presentation.settings.SettingsScreen
 import com.example.myapplication5.presentation.settings.recyclebin.RecycleBinScreen
@@ -42,7 +43,6 @@ fun NavigationGraph(
         composable<Screen.AddContact> {
             AddContactScreen(navController)
         }
-
         composable<Screen.SignIn> {
             SignInScreen(navController)
         }
@@ -51,6 +51,9 @@ fun NavigationGraph(
         }
         composable<Screen.RecycleBin> {
             RecycleBinScreen(navController)
+        }
+        composable<Screen.EditContact> {
+            EditContactScreen(navController)
         }
     }
 }

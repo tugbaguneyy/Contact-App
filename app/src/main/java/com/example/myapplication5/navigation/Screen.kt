@@ -25,4 +25,9 @@ sealed interface Screen {
 
     @Serializable
     data object RecycleBin : Screen
+
+    @Serializable
+    data class EditContact(
+        val id : Int
+    ) : Screen
 }
