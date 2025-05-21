@@ -7,18 +7,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -32,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.myapplication5.navigation.Screen
+import com.example.myapplication5.presentation.components.BackButton
 import com.example.myapplication5.presentation.settings.components.SettingsItem
 
 @Composable
@@ -51,25 +47,17 @@ fun SettingsScreen(navController: NavController){
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            // Top Row: Back button
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(
-                    onClick = { navController.navigateUp() },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(Color.White.copy(alpha = 0.2f), CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+                BackButton(
+                    navController = navController,
+                    buttonSize = 40.dp,
+                    backgroundColor = Color.White.copy(alpha = 0.2f)
+                )
             }
 
             // Title

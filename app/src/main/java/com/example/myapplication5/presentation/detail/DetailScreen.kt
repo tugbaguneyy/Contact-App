@@ -15,11 +15,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.myapplication5.navigation.Screen
+import com.example.myapplication5.presentation.components.BackButton
 import com.example.myapplication5.presentation.components.ProfileImage
 import com.example.myapplication5.presentation.detail.components.ContactOptionsMenu
 import com.example.myapplication5.presentation.detail.components.ContactRow
@@ -61,13 +59,7 @@ fun DetailScreen(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Geri",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
+            BackButton(navController)
 
             ContactOptionsMenu(
                 onEditClick = { navController.navigate(Screen.EditContact(id = contact.id)) },

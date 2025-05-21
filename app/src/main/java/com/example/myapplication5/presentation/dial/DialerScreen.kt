@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Backspace
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.Icon
@@ -36,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.myapplication5.presentation.components.BackButton
 import com.example.myapplication5.presentation.dial.components.DialButton
 
 @Composable
@@ -56,16 +56,10 @@ fun DialerScreen(navController: NavController) {
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
-        IconButton(
-            onClick = { navController.navigateUp() },
-            modifier = Modifier.size(40.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
+        BackButton(
+            navController = navController,
+            buttonSize = 40.dp
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
