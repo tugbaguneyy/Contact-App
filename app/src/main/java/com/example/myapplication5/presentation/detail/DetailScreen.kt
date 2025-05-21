@@ -1,7 +1,5 @@
 package com.example.myapplication5.presentation.detail
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,9 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.myapplication5.navigation.Screen
+import com.example.myapplication5.presentation.components.ProfileImage
 import com.example.myapplication5.presentation.detail.components.ContactOptionsMenu
 import com.example.myapplication5.presentation.detail.components.ContactRow
 import com.example.myapplication5.utils.ImageUtils.base64ToBitmap
@@ -82,35 +78,23 @@ fun DetailScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 📷 Profil Fotoğrafı veya Baş Harfler
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                    shape = CircleShape
-                )
-                .align(Alignment.CenterHorizontally),
-            contentAlignment = Alignment.Center
-        ) {
-            if (bitmap != null) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                Text(
-                    text = "${contact.name.firstOrNull()?.uppercase() ?: ""}${contact.surname.firstOrNull()?.uppercase() ?: ""}",
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.background
-                )
-            }
-        }
+       Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+           ProfileImage(
+               imageBase64 = contact.image,
+               name = contact.name,
+               surname = contact.surname,
+               modifier = Modifier
+                   .size(100.dp)
+                   .border(
+                       width = 1.dp,
+                       color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                       shape = CircleShape
+                   ),
+               backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+               textColor = MaterialTheme.colorScheme.background,
+               fontSize = MaterialTheme.typography.headlineLarge.fontSize
+           )
+       }
 
         Spacer(modifier = Modifier.height(16.dp))
 
